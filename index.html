@@ -4,20 +4,291 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
-
+		<title>Text-to-Speech for Automatic Speech Recognition</title>
+		
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
 		<link rel="stylesheet" href="dist/theme/black.css">
-
+		<link rel="stylesheet" href="dist/theme/custom.css">
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<link rel="stylesheet" href="dist/spectrogram-player/sp.css">
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section >
+					<h2>Text-to-Speech for <br> Automatic Speech Recognition</h2>
+					Christoph Minixhofer<br>
+					<em>Third Year Review</em>
+				</section>
+				<section data-auto-animate>
+					<h2>Why TTS-for-ASR?</h2>
+					<ul>
+						<li>Data augmentation</li>
+						<li>Domain adaptation</li>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2>Why TTS-for-ASR?</h2>
+					<ul>
+						<li>Low-resource languages</li>
+						<li>Speaker adaptation</li>
+						<li>Lexical adaptation</li>
+						<li>Disordered speech</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="1">
+					<h2>TTS Naturalness</h2>
+					Synthetic speech has reportedly reached human parity in terms of naturalness.
+				</section>
+				<section data-auto-animate data-auto-animate-id="1">
+					<h2>TTS Naturalness</h2>
+					Synthetic speech has reportedly reached human parity in terms of naturalness.
+					<br>
+					<em>But...</em>
+					There is still a gap for TTS-for-ASR.
+				</section>
+				<section data-auto-animate>
+					<h2>Quantifying the Gap</h2>
+					\( \overset{\sim}{\theta} \leftarrow \) ASR model params trained on synthetic speech
+					<br>
+					\( \theta \leftarrow \) ASR model params trained on natural speech
+					<br>
+					\( \text{WERR}(\overset{\sim}{\theta},\theta) = \frac{\text{WER}(\overset{\sim}{\theta})}{\text{WER}(\theta)} \)
+				</section>
+				<section>
+					<h2>Quantifying the Gap</h2>
+					With \( \text{MOSR} \) as an equivalent measure for \( \text{MOS} \):
+					<br>
+					<h3>2019</h3>
+					<ul>
+						<li>\( \text{MOSR} \approx 1.02 \)</li>
+						<li>\( \text{WERR} \approx 7 \)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Quantifying the Gap</h2>
+					With \( \text{MOSR} \) as an equivalent measure for \( \text{MOS} \):
+					<br>
+					<h3>2024</h3>
+					<ul>
+						<li>\( \text{MOSR} \approx 1 \)</li>
+						<li>\( \text{WERR} \approx 1.5 \)</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="3">
+					<h2>Why does the gap exist?</h2>
+				</section>
+				<section data-auto-animate data-auto-animate-id="3">
+					<h2>Why does the gap exist?</h2>
+					<p style="font-size: .8em">Let's see the <span style="color: #f98000">synthetic</span> and real speech as distributions.</p>
+					<div id="p5-1" style="width: 80vw; height: 25vh; position: absolute; left: 50%; transform: translateX(-50%);"></div>
+				</section>
+				<section>
+					<h2>Why does the gap exist?</h2>
+					<p style="font-size: .8em">If they matched perfectly, the \( \text{WERR} \) would be 1.</p>
+					<div id="p5-2" style="width: 80vw; height: 25vh; position: absolute; left: 50%; transform: translateX(-50%);"></div>
+				</section>
+				<section>
+					<h2>Why does the gap exist?</h2>
+					<p style="font-size: .8em">A system producing unnatural speech will have a higher \( \text{WERR} \).</p>
+					<div id="p5-3" style="width: 80vw; height: 25vh; position: absolute; left: 50%; transform: translateX(-50%);"></div>
+				</section>
+				<section>
+					<h2>Why does the gap exist?</h2>
+					<p style="font-size: .8em">But the same is the case if the full distribution is not covered.</p>
+					<div id="p5-4" style="width: 80vw; height: 25vh; position: absolute; left: 50%; transform: translateX(-50%);"></div>
+				</section>
+				<section data-auto-animate data-auto-animate-id="4">
+					<h2>Previous TTS-for-ASR Models</h2>
+					<ul>
+						<li>AR and NAR models</li>
+						<li>latent variable models</li>
+						<li>conditioning on factors such as prosody</li>
+						<li>post-generation augmentation</li>
+						<li>systems trained using L1 or L2 loss are still common</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="4">
+					<h2>TTS-for-ASR Models</h2>
+					<ul>
+						<li>AR and NAR models</li>
+						<li>latent variable models</li>
+						<li>conditioning on factors such as prosody</li>
+						<li>post-generation augmentation</li>
+						<li>systems trained using L1 or L2 loss are still common</li>
+						<li style="color: #f98000">scaling to large datasets</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="4">
+					<h2>TTS-for-ASR Models</h2>
+					<img src="dist/svg/tts-for-asr-highlighted.svg">
+				</section>
+				<section>
+					<h2>Denoising Diffusion Probabilistic Models</h2>
+					<video
+						data-autoplay
+						src="dist/gif/ddpm.mp4"
+						height="20%"
+					></video>
+					<ul>
+						<li>Used for synthetic data for computer vision tasks</li>
+						<li>Probabilistic \( \rightarrow \) better distribution coverage</li>
+						<li>Architectures can be kept the same</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="5">
+					<h2>Scaling using DDPM</h2>
+					<ul>
+						<!-- <li>We investigate the \( WERR \)</li> -->
+						<li>Same architecture (U-Net), DDPM vs. MSE loss</li>
+						<li>From 100 to 2500 hours of training data</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="5">
+					<h2>Scaling using DDPM</h2>
+					<img src="dist/svg/ddpm-vs-mse.svg">
+				</section>
+				<section data-auto-animate data-auto-animate-id="5">
+					<h2>Scaling using DDPM</h2>
+					<ul>
+						<li>Scaling alone does not solve the problem</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+					<!-- background on FID -->
+					<ul>
+						<li>Frechet Inception Distance (FID)</li>
+						<li>based on Wasserstein Distance \( W \)</li>
+						<li>defined for both 1-D and N-D latent distributions</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+					<p>An equivalent for speech is to calculate \( W \) between SSL representations of the synthetic and natural speech</p>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+					<p>An equivalent for speech is to calculate \( W \) between SSL representations of the synthetic and natural speech</p>
+					<p>But this is neither robust nor interpretable.</p>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+					<p>We improve on this by evaluating different <em>factors</em>.</p>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+					<ul>
+						<li>General</li>
+						<li>Environment</li>
+						<li>Intelligibility</li>
+						<li>Prosody</li>
+						<li>Speaker</li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="6">
+					<h2>Analysing Distribution Factors</h2>
+					<ul>
+						<li>General: <span style="opacity: 0.75;">Hubert, wav2vec 2.0, WavLM</span></li>
+						<li>Environment: <span style="opacity: 0.75;">PESQ + VoiceFixer, WADA SNR</span></li>
+						<li>Intelligibility: <span style="opacity: 0.75;">wav2vec 2.0, Whisper</span></li>
+						<li>Prosody: <span style="opacity: 0.75;">Hubert + Token Durations, Masked Prosody Model, PyWorld Pitch</span></li>
+						<li>Speaker: <span style="opacity: 0.75;">WeSpeaker, D-Vector</span></li>
+					</ul>
+					<br><br>
+					We call this the <em>Text-to-Speech Distribution Score</em> (TTSDS).
+				</section>
+				<section data-auto-animate data-auto-animate-id="7">
+					<h2>Analysing Distribution Factors: TTSDS</h2>
+					<img src="dist/svg/dists.png" style="width: 50svw;">
+				</section>
+				<section data-auto-animate data-auto-animate-id="7">
+					<h2>Analysing Distribution Factors: TTSDS</h2>
+					<img src="dist/svg/heatmap.png" style="width: 50vw;">
+				</section>
+				<section data-auto-animate data-auto-animate-id="7">
+					<h2>Analysing Distribution Factors: TTSDS</h2>
+					<ul>
+						<li>Correlation with human evaluation across time periods</li>
+						<li>Benchmark for modern TTS systems</li>
+						<li>More information: <a href=https://ttsdsbenchmark.com">ttsdsbenchmark.com</a></li>
+					</ul>
+				</section>
+				<section data-auto-animate data-auto-animate-id="7">
+					<h2>Analysing Distribution Factors: TTSDS</h2>
+					<table border="1" style="position: absolute; left: 50%; transform: translateX(-50%); font-size: .8em; width: 70vw;">
+						<thead>
+							<tr>
+								<th>Environment</th>
+								<th>Prosody</th>
+								<th>Intelligibility</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>"That is very important," said Holmes.</td>
+								<td>You may wonder to hear me speak thus, being so young.</td>
+								<td>You must excuse me.</td>
+							</tr>
+							<tr>
+								<td><div id="low_env"></div></td>
+								<td><div id="low_pros"></div></td>
+								<td><div id="low_int"></div></td>
+							</tr>
+							<tr>
+								<td>Amphion NaturalSpeech</td>
+								<td>VoiceCraft 2.0</td>
+								<td>Bark</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				<section data-auto-animate data-auto-animate-id="8">
+					<h2>Improving TTS-for-ASR using TTSDS</h2>
+					Different factors contribute to human perception of naturalness compared to TTS-for-ASR performance.
+					<br>
+					In preliminary experiments, we found environment and intelligibility to be the most important factors.
+				</section>
+				<section data-auto-animate data-auto-animate-id="8">
+					<h2>Improving TTS-for-ASR using TTSDS</h2>
+					Use this to generate speech that is more suitable for TTS-for-ASR.
+					<br>
+					<ul>
+						<li>Model Selection</li>
+						<li>Data Selection</li>
+						<li>Conditioning</li>
+						<li>Augmentation</li>
+				</section>
+				<section data-auto-animate data-auto-animate-id="8">
+					<h2>Improving TTS-for-ASR using TTSDS</h2>
+					We did achieve improvements in WERR using this approach.
+					<br>
+					<ul>
+						<li>Model Selection</li>
+						<li>Data Selection</li>
+						<li style="color: #f98000">Conditioning</li>
+						<li style="color: #f98000">Augmentation</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Improving TTS-for-ASR using TTSDS</h2>
+					There is still work to do!
+					<br>
+					<ul>
+						<li style="color: #f98000">Model Selection</li>
+						<li style="color: #f98000">Data Selection</li>
+						<li>Conditioning</li>
+						<li>Augmentation</li>
+					</ul>
+				</section>
+				<section>
+					Thank you!
+				</section>
 			</div>
 		</div>
 
@@ -25,16 +296,353 @@
 		<script src="plugin/notes/notes.js"></script>
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
+		<script src="dist/spectrogram-player/sp.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
-
+				progress: false,
+				transition: 'none',
+				slideNumber: true,
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+		<script>
+			let font;
+
+			function draw_gaussians(p, a1, b1, c1, a2, b2, c2) {
+				p.background("#041e42"); // Clear the canvas with a white background
+			
+				// Draw the first Gaussian curve
+				// f98000 -> rgb(249, 128, 22)
+				p.stroke(249, 128, 22); // Set stroke color to primary orange
+				// fill with the same color with alpha value of 50%
+				p.fill(249, 128, 22, 127);
+				p.beginShape();
+				for (let x = 0; x < width; x++) {
+					let y1 = a1 * p.exp(-p.pow(x - b1, 2) / (2 * p.pow(c1, 2)));
+					p.vertex(x, height - y1);
+				}
+				p.endShape();
+			
+				// Draw the second Gaussian curve
+				p.stroke(255, 255, 255); // Set stroke color to white
+				// fill with the same color with alpha value of 50%
+				p.fill(255, 255, 255, 127);
+				p.beginShape();
+				for (let x = 0; x < width; x++) {
+					let y2 = a2 * p.exp(-p.pow(x - b2, 2) / (2 * p.pow(c2, 2)));
+					p.vertex(x, height - y2);
+				}
+				p.endShape();
+			}
+
+			var setup_1 = function(p) {
+				p.setup = function() {
+					// calculate canvas size as a fraction of the window size
+					// let canvasSize = min(windowWidth, windowHeight) * 0.6;
+					let canvas = p.createCanvas(p.windowWidth * 0.8, p.windowHeight * 0.25);
+					canvas.parent('p5-1'); // Attach the canvas to the div with id="p5-container"
+				}
+				p.draw = function draw() {
+					p.background("#041e42"); // Clear the canvas with a white background
+					
+					// Parameters for the first Gaussian curve
+					let a1 = 300; // amplitude
+					let b1 = 100; // mean (center of the peak)
+					let c1 = 25;  // standard deviation (controls the width of the curve)
+					
+					// Parameters for the second Gaussian curve
+					let a2 = 300; // amplitude
+					let b2 = 300; // mean (center of the peak)
+					let c2 = 25; // standard deviation (controls the width of the curve)
+				
+					height = p.windowHeight * 0.25;
+					width = p.windowWidth * 0.8;
+
+					// scale the parameters based on the window size
+					a1 = a1 * height / 400;
+					b1 = b1 * width / 400;
+					c1 = c1 * width / 400;
+					a2 = a2 * height / 400;
+					b2 = b2 * width / 400;
+					c2 = c2 * width / 400;
+
+					draw_gaussians(p, a1, b1, c1, a2, b2, c2);
+				}
+			}
+
+			let t_2 = 0;
+			let s_2 = false;
+
+			var setup_2 = function(p) {
+				let b1, b2;
+				let b1_start = 100;
+				let b2_start = 300;
+				let target_b = 200; // Target position for both curves to converge to
+
+				p.setup = function() {
+					let canvas = p.createCanvas(p.windowWidth * 0.8, p.windowHeight * 0.25);
+					canvas.parent('p5-2'); // Attach the canvas to the div with id="p5-container"
+					b1 = b1_start; // Initial mean for the first Gaussian
+					b2 = b2_start; // Initial mean for the second Gaussian
+				}
+
+				p.draw = function draw() {
+					p.background("#041e42"); // Clear the canvas with a white background
+					
+					// Parameters for the Gaussian curves
+					let a1 = 300; // amplitude
+					let c1 = 25;  // standard deviation (controls the width of the curve)
+					let a2 = 300; // amplitude
+					let c2 = 25; // standard deviation (controls the width of the curve)
+
+					height = p.windowHeight * 0.25;
+					width = p.windowWidth * 0.8;
+
+					// Scale the parameters based on the window size
+					a1 = a1 * height / 400;
+					c1 = c1 * width / 400;
+					a2 = a2 * height / 400;
+					c2 = c2 * width / 400;
+
+					// Gradually move b1 and b2 towards target_b
+					let b1 = p.lerp(b1_start, target_b, t_2);
+					let b2 = p.lerp(b2_start, target_b, t_2);
+
+					if (s_2) {
+						t_2 += (1 - t_2) * 0.05;
+					}
+
+					// if (b1 < target_b) b1 += 1; // Move the first Gaussian to the right
+					// if (b2 > target_b) b2 -= 1; // Move the second Gaussian to the left
+
+					// Draw the animated Gaussians
+					draw_gaussians(p, a1, b1 * width / 400, c1, a2, b2 * width / 400, c2);
+				}
+			}
+
+			let t_3 = 0;
+			let s_3 = false;
+
+			var setup_3 = function(p) {
+				let b1, b2;
+				let a1_start = 300;
+				let b1_start = 200;
+				let c1_start = 25;
+				let a2_start = 300;
+				let b2_start = 200;
+				let target_a1 = 400;
+				let target_b1 = 170;
+				let target_c1 = 15;
+				let target_a2 = 250;
+				let target_b2 = 210;
+
+				p.setup = function() {
+					let canvas = p.createCanvas(p.windowWidth * 0.8, p.windowHeight * 0.25);
+					canvas.parent('p5-3'); // Attach the canvas to the div with id="p5-container"
+					b1 = b1_start; // Initial mean for the first Gaussian
+					b2 = b2_start; // Initial mean for the second Gaussian
+					font = p.loadFont('dist/theme/fonts/libertinus_serif.otf');
+				}
+
+				p.draw = function draw() {
+					p.background("#041e42"); // Clear the canvas with a white background
+					
+					// Parameters for the Gaussian curves
+					let c2 = 25; // standard deviation (controls the width of the curve)
+
+					height = p.windowHeight * 0.25;
+					width = p.windowWidth * 0.8;
+
+					let height_ratio = height / 400;
+					let width_ratio = width / 400;
+
+					// Gradually move
+					let a1 = p.lerp(a1_start, target_a1, t_3);
+					let b1 = p.lerp(b1_start, target_b1, t_3);
+					let c1 = p.lerp(c1_start, target_c1, t_3);
+					let a2 = p.lerp(a2_start, target_a2, t_3);
+					let b2 = p.lerp(b2_start, target_b2, t_3);
+
+					// Scale the parameters based on the window size
+					a1 = a1 * height_ratio;
+					// b1 = b1 * width_ratio;
+					c1 = c1 * width_ratio;
+					a2 = a2 * height_ratio;
+					// b2 = b2 * width_ratio;
+					c2 = c2 * width_ratio;
+
+					if (s_3) {
+						t_3 += (1 - t_3) * 0.05;
+					}
+
+					// Draw the animated Gaussians
+					draw_gaussians(p, a1, b1 * width / 400, c1, a2, b2 * width / 400, c2);
+					
+					// only start animating after 0.5
+					let t_3_text = t_3
+					// text "unnatural synthetic speech"
+					
+					p.textFont(font);
+					p.textSize(20);
+					p.textAlign(p.CENTER); 
+					p.stroke(255, 255, 255, 255 * t_3_text);
+					p.fill(255, 255, 255, 255 * t_3_text);
+					p.translate(158 * width_ratio, 318 * height_ratio);
+					p.text('Unnatural \n Synthetic Speech', -100, 0);
+					p.resetMatrix();
+					// text "natural synthetic speech"
+					p.textFont(font);
+					p.textSize(20);
+					p.stroke(255, 255, 255, 255 * t_3_text);
+					p.fill(255, 255, 255, 255 * t_3_text);
+					p.translate(190 * width_ratio, 318 * height_ratio);
+					p.text('Natural \n Synthetic Speech', 0, 0);
+				}
+			}
+
+			let t_4 = 0;
+			let s_4 = false;
+
+			var setup_4 = function(p) {
+				let b1, b2;
+				let a1_start = 400;
+				let b1_start = 170;
+				let c1_start = 15;
+				let a2_start = 250;
+				let b2_start = 210;
+				let target_a1 = 400;
+				let target_b1 = 210;
+				let target_c1 = 15;
+				let target_a2 = 250;
+				let target_b2 = 210;
+
+				p.setup = function() {
+					let canvas = p.createCanvas(p.windowWidth * 0.8, p.windowHeight * 0.25);
+					canvas.parent('p5-4'); // Attach the canvas to the div with id="p5-container"
+					b1 = b1_start; // Initial mean for the first Gaussian
+					b2 = b2_start; // Initial mean for the second Gaussian
+					font = p.loadFont('dist/theme/fonts/libertinus_serif.otf');
+				}
+
+				p.draw = function draw() {
+					p.background("#041e42"); // Clear the canvas with a white background
+					
+					// Parameters for the Gaussian curves
+					let c2 = 25; // standard deviation (controls the width of the curve)
+
+					height = p.windowHeight * 0.25;
+					width = p.windowWidth * 0.8;
+
+					let height_ratio = height / 400;
+					let width_ratio = width / 400;
+
+					// Gradually move
+					let a1 = p.lerp(a1_start, target_a1, t_4);
+					let b1 = p.lerp(b1_start, target_b1, t_4);
+					let c1 = p.lerp(c1_start, target_c1, t_4);
+					let a2 = p.lerp(a2_start, target_a2, t_4);
+					let b2 = p.lerp(b2_start, target_b2, t_4);
+
+					// Scale the parameters based on the window size
+					a1 = a1 * height_ratio;
+					// b1 = b1 * width_ratio;
+					c1 = c1 * width_ratio;
+					a2 = a2 * height_ratio;
+					// b2 = b2 * width_ratio;
+					c2 = c2 * width_ratio;
+
+					if (s_4) {
+						t_4 += (1 - t_4) * 0.05;
+					}
+
+					// Draw the animated Gaussians
+					draw_gaussians(p, a1, b1 * width / 400, c1, a2, b2 * width / 400, c2);
+					
+					p.textFont(font);
+					p.textSize(20);
+					p.textAlign(p.CENTER); 
+					p.stroke(255, 255, 255, 255 * (1 - t_4));
+					p.fill(255, 255, 255, 255 * (1 - t_4));
+					p.translate(158 * width_ratio, 318 * height_ratio);
+					p.text('Unnatural \n Synthetic Speech', -100, 0);
+					p.resetMatrix();
+					// text "natural synthetic speech"
+					p.textFont(font);
+					p.textSize(20);
+					p.stroke(255, 255, 255, 255 * t_4);
+					p.fill(255, 255, 255, 255 * t_4);
+					p.translate(
+						p.lerp(
+							190 * width_ratio,
+							210 * width_ratio,
+							t_4
+						), 
+						318 * height_ratio
+					);
+					p.text('Natural \n Synthetic Speech', 0, 0);
+				}
+			}
+			
+			new p5(setup_1);
+			new p5(setup_2);
+			new p5(setup_3);
+			new p5(setup_4);
+
+			// start the animation when the slide is shown
+			Reveal.on('slidechanged', function(event) {
+				if (event.indexh == 10) {
+					t_2 = 0;
+					s_2 = true;
+				}
+				if (event.indexh == 11) {
+					t_3 = 0;
+					s_3 = true;
+				}
+				if (event.indexh == 12) {
+					t_4 = 0;
+					s_4 = true;
+				}
+			});
+		</script>
+		<script type="module">
+			import WaveSurfer from 'https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.esm.js'
+			import Spectrogram from 'https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/plugins/spectrogram.esm.js'
+
+			// reusable function to add audio, takes in the audio file path and html element id
+			function addAudio(audioPath, elementId) {
+				const ws = WaveSurfer.create({
+					container: elementId,
+					progressColor: 'rgb(200, 200, 200)',
+					url: audioPath,
+					sampleRate: 22050,
+					height: 0,
+				})
+
+				ws.registerPlugin(
+					Spectrogram.create({
+						height: 200,
+						frequencyMax: 10000,
+						labels: false,
+						scale: "mel",
+						windowFunc: "hann",
+					}),
+				)
+
+				ws.on('interaction', () => {
+					ws.play()
+				})
+			}
+
+			addAudio('audio/low_env.wav', '#low_env')
+			addAudio('audio/low_pros.wav', '#low_pros')
+			addAudio('audio/low_int.wav', '#low_int')
 		</script>
 	</body>
 </html>
